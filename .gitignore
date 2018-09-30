@@ -4,3 +4,5 @@ Packages
 *.csproj
 *.sln
 .vs
+*.meta
+Temp

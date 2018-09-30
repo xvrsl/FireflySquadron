@@ -2,13 +2,63 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ShipboardWeapon : MonoBehaviour {
-    public enum WeaponType
+public abstract class ShipboardWeapon : PlanExecuteBehaviour {
+    public bool fire;
+
+    public float maxMagazine
     {
-        bullet = 0,
-        instant = 1,
-        laser = 2
+        get
+        {
+            return GetMaxMagazine();
+        }
     }
-    public float fireRate;
-    public float damage;
+    public float magazine
+    {
+        get
+        {
+            return GetMagazine();
+        }
+    }
+    public float magazineStatus
+    {
+        get
+        {
+            if(maxMagazine > 0)
+            {
+                return magazine / maxMagazine;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
+
+    public abstract float GetMaxMagazine();
+    public abstract float GetMagazine();
+
+    public abstract void OnFire();
+    public abstract void OnFireStart();
+    public abstract void OnFireCease();
+
+    public void FireStart()
+    {
+        OnFireStart();
+        fire = true;
+    }
+    public void FireCease()
+    {
+        OnFireCease();
+        fire = false;
+    }
+
+    protected virtual void Update()
+    {
+        if (fire)
+        {
+            OnFire();
+        }
+
+    }
+
 }
