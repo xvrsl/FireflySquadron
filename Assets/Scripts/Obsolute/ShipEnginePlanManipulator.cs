@@ -55,11 +55,12 @@ public class ShipEnginePlanManipulator : PlanExecuteBehaviour {
 
     public override void OnPlanPhaseStart()
     {
-        
+        base.OnPlanPhaseStart();
     }
 
     public override void OnExecutePhaseStart()
     {
+        base.OnExecutePhaseStart();
         index = -1;
         ExecuteNextPlan();
     }

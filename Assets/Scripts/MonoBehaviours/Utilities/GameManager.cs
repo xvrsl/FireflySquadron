@@ -61,6 +61,18 @@ public class GameManager : MonoBehaviour {
         }
     }
     public float executePhaseTimer = 0f;
+    public float t
+    {
+        get
+        {
+            if(gameSettings.executeTime <= 0)
+            {
+                return 0;
+            }
+            else
+                return executePhaseTimer / gameSettings.executeTime;
+        }
+    }
 
     public delegate void GameManagerEventHandler();
     public event GameManagerEventHandler onPlanPhaseStart;

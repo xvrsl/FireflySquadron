@@ -16,10 +16,10 @@ public class Bullet : PlanExecuteBehaviour {
         }
     }
     public float flyingSpeed;
-    public float damage;
+    public List<Damage> damages;
+
     public float lifeTime = 5;
     float age;
-    bool executing;
 
     public void Initialize()
     {
@@ -34,7 +34,7 @@ public class Bullet : PlanExecuteBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(executing)
+        if(execute)
         {
             age += Time.deltaTime;
         }
@@ -52,13 +52,15 @@ public class Bullet : PlanExecuteBehaviour {
 
     public override void OnPlanPhaseStart()
     {
-        executing = false;
+        base.OnPlanPhaseStart();
+        execute = false;
         rigidbody.simulated = false;
     }
 
     public override void OnExecutePhaseStart()
     {
-        executing = true;
+        base.OnExecutePhaseStart();
+        execute = true;
         rigidbody.simulated = true;
     }
 }

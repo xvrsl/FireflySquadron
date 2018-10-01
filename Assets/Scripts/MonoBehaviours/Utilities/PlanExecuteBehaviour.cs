@@ -3,8 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class PlanExecuteBehaviour : MonoBehaviour {
-    public abstract void OnPlanPhaseStart();
-    public abstract void OnExecutePhaseStart();
+    public bool execute;
+    public virtual void OnPlanPhaseStart()
+    {
+        execute = false;
+    }
+    public virtual void OnExecutePhaseStart()
+    {
+        execute = true;
+    }
     private void Awake()
     {
         GameManager.instance.RegisterPlanExecuteBehaviour(this);

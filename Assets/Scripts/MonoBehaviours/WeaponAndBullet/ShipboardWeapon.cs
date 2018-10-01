@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class ShipboardWeapon : PlanExecuteBehaviour {
     public bool fire;
-
     public float maxMagazine
     {
         get
@@ -58,7 +57,6 @@ public abstract class ShipboardWeapon : PlanExecuteBehaviour {
         {
             OnFire();
         }
-
     }
 
 }

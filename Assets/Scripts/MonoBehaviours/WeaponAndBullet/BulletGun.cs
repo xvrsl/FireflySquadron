@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class BulletGun : ShipboardWeapon
 {
-    bool executing;
     public Transform gunPoint;
     public GameObject bulletPrefab;
     List<GameObject> bulletPool = new List<GameObject>();
+    public enum FireMode
+    {
+        single = 0,
+        continuous = 1
+    }
+    public FireMode mode;
+
     public float fireRate = 10;
     public float scatter = 5;
-    public float damage = 1;
+    public List<Damage> damages = Damage.GetSingleDamageList(1,Damage.DamageType.physical);
     public float flyingSpeed = 60;
     public float lifeTime = 5;
 
@@ -40,7 +46,7 @@ public class BulletGun : ShipboardWeapon
     protected override void Update()
     {
         base.Update();
-        if(executing && fireBuffer < 1) {
+        if(execute && fireBuffer < 1) {
             fireBuffer += fireRate * Time.deltaTime;
         }
     }
@@ -63,7 +69,7 @@ public class BulletGun : ShipboardWeapon
         newBullet.SetActive(true);
         Bullet newBulletComponent = newBullet.GetComponent<Bullet>();
         newBulletComponent.flyingSpeed = flyingSpeed;
-        newBulletComponent.damage = damage;
+        newBulletComponent.damages = new List<Damage>(damages);
         newBulletComponent.lifeTime = lifeTime;
         newBullet.transform.position = gunPoint.position;
         newBullet.transform.rotation = gunPoint.rotation;
@@ -73,12 +79,9 @@ public class BulletGun : ShipboardWeapon
         newBulletComponent.Initialize();
         
     }
-
-
-    public override void OnFire()
+    public void CheckStatusAndFireOnce(FireMode fireIfMode)
     {
-        
-        if(executing && fireBuffer >= 1)
+        if (execute && mode == fireIfMode && fireBuffer >= 1)
         {
             fireBuffer--;
             if (_magazine > 0)
@@ -93,6 +96,11 @@ public class BulletGun : ShipboardWeapon
         }
     }
 
+    public override void OnFire()
+    {
+        CheckStatusAndFireOnce(FireMode.continuous);
+    }
+
     public override void OnFireCease()
     {
         
@@ -100,16 +108,18 @@ public class BulletGun : ShipboardWeapon
 
     public override void OnFireStart()
     {
-        
+        CheckStatusAndFireOnce(FireMode.single);
     }
 
     public override void OnPlanPhaseStart()
     {
-        executing = false;
+        base.OnPlanPhaseStart();
+        execute = false;
     }
 
     public override void OnExecutePhaseStart()
     {
-        executing = true;
+        base.OnExecutePhaseStart();
+        execute = true;
     }
 }

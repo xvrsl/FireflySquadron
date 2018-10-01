@@ -266,7 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d3dc91dfa389045a1639b230ce8a9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 0}
+  execute: 0
   flyingSpeed: 1
   damage: 1
   lifeTime: 1
@@ -548,14 +548,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21fdcbce3b061a841a9798e26203dbd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  execute: 0
   fire: 0
   gunPoint: {fileID: 0}
   bulletPrefab: {fileID: 263293997}
+  mode: 1
   fireRate: 10
   scatter: 10
   damage: 1
   flyingSpeed: 60
-  lifeTime: 5
+  lifeTime: 1
   _maxMagazine: 10000
   _magazine: 10000
 --- !u!1 &733393223
@@ -571,6 +573,8 @@ GameObject:
   - component: {fileID: 733393228}
   - component: {fileID: 733393227}
   - component: {fileID: 733393229}
+  - component: {fileID: 733393231}
+  - component: {fileID: 733393230}
   m_Layer: 0
   m_Name: Firefly
   m_TagString: Untagged
@@ -682,8 +686,8 @@ MonoBehaviour:
   brakeDrag: 1
   sideVelocityDrag: 1
   maxSteer: 10
-  accelerateHandle: 0
-  steerHandle: 0
+  accelerateHandle: 0.436
+  steerHandle: 0.42
   brake: 0
 --- !u!114 &733393228
 MonoBehaviour:
@@ -696,6 +700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be4c9af2e4a085d4bb673c4476c35c9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  execute: 0
 --- !u!114 &733393229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -707,8 +712,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 685d44a5d1674e34db02b5d8014fc5ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  execute: 0
   weaponSlots:
-  - {fileID: 0}
+  - active: 1
+    triggered: 0
+    weapon: {fileID: 727278235}
+    triggerAfter: 0.3
+    ceaseAfter: 0.5
+--- !u!114 &733393230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 733393223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb93642c10b387438af7a7d9f86fa79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSheild: 100
+  sheild: 100
+  sheildEfficiencyCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &733393231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 733393223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 250c090daada8664aaa747bb465f507b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sheild: {fileID: 0}
+  maxHealth: 100
+  health: 100
 --- !u!1 &859745495
 GameObject:
   m_ObjectHideFlags: 0

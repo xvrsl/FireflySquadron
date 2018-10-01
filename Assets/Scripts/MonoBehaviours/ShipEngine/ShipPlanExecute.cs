@@ -26,11 +26,13 @@ public class ShipPlanExecute : PlanExecuteBehaviour
 
     public override void OnExecutePhaseStart()
     {
+        base.OnExecutePhaseStart();
         rigidbody.simulated = true;
     }
 
     public override void OnPlanPhaseStart()
     {
+        base.OnPlanPhaseStart();
         rigidbody.simulated = false;
     }
 }
