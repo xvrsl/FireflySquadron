@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Bullet : PlanExecuteBehaviour {
     Rigidbody2D _rigidbody;
+
     public new Rigidbody2D rigidbody
     {
         get
@@ -20,6 +21,8 @@ public class Bullet : PlanExecuteBehaviour {
 
     public float lifeTime = 5;
     float age;
+    public bool destroyOnContact = true;
+    public bool destroyOnDealDamage = true;
 
     public void Initialize()
     {
@@ -62,5 +65,23 @@ public class Bullet : PlanExecuteBehaviour {
         base.OnExecutePhaseStart();
         execute = true;
         rigidbody.simulated = true;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Health targetHealth = collision.gameObject.GetComponent<Health>();
+        if (targetHealth != null)
+        {
+            //Deal Damage
+            targetHealth.TakeDamage(damages);
+            if (destroyOnDealDamage)
+            {
+                Destroy();
+            }
+        }
+        if (destroyOnContact)
+        {
+            Destroy();
+        }
     }
 }

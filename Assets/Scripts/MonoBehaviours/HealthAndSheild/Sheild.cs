@@ -17,7 +17,7 @@ public class Sheild : PlanExecuteBehaviour {
     public float sheildRegenerationRate = 5;
 
     [Header("Efficiency")]
-    public AnimationCurve sheildEfficiencyCurve = AnimationCurve.Constant(0,1,0.5f);
+    public AnimationCurve sheildEfficiencyCurve = AnimationCurve.Linear(0,0,1,1);
     public float sheildEfficiency
     {
         get
@@ -41,16 +41,15 @@ public class Sheild : PlanExecuteBehaviour {
             case Damage.DamageType.explosion:
                 return explosionBlockFactor;
             default:
-                return 0;
+                return physicalBlockFactor;
         }
     }
     public Damage TakeDamageAndGetPierce(Damage damage)
     {
         sheildRegenerationCoolDownBuffer = sheildRegenerationCoolDown;
-
+        sheild -= damage.value;
         float blockedDamage = damage.value * sheildEfficiency * GetBlockEfficiency(damage.damageType);
         damage.value = damage.value - blockedDamage;
-        sheild -= blockedDamage;
         if(sheild <= 0)
         {
             sheild = 0;
@@ -67,7 +66,14 @@ public class Sheild : PlanExecuteBehaviour {
             }
             if (sheildRegenerationCoolDownBuffer <= 0)
             {
-                sheild += sheildRegenerationRate * Time.fixedDeltaTime;
+                if(sheild <= maxSheild)
+                {
+                    sheild += sheildRegenerationRate * Time.fixedDeltaTime;
+                    if(sheild > maxSheild)
+                    {
+                        sheild = maxSheild;
+                    }
+                }
             }
         }
     }

@@ -26,6 +26,7 @@ public class Health : MonoBehaviour {
 
     public void TakeDamage(Damage damage)
     {
+        damage = new Damage(damage);
         if(sheild != null)
         {
             damage = sheild.TakeDamageAndGetPierce(damage);
@@ -35,6 +36,13 @@ public class Health : MonoBehaviour {
         if(health <= 0)
         {
             HealthZeroedOut();
+        }
+    }
+    public void TakeDamage(List<Damage> damages)
+    {
+        foreach(var cur in damages)
+        {
+            TakeDamage(cur);
         }
     }
     public void TakeHeal(float heal)
@@ -47,6 +55,6 @@ public class Health : MonoBehaviour {
     }
     public void HealthZeroedOut()
     {
-
+        Destroy(this.gameObject);
     }
 }

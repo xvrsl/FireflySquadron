@@ -18,6 +18,11 @@ public class Damage {
         this.damageType = damageType;
     }
 
+    public Damage(Damage original)
+    {
+        this.value = original.value;
+        this.damageType = original.damageType;
+    }
     public static List<Damage> GetSingleDamageList(float value,DamageType damageType)
     {
         List<Damage> result = new List<Damage>();

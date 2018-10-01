@@ -10,7 +10,9 @@ public class ShipboardWeaponHolder : PlanExecuteBehaviour {
         [HideInInspector]
         public bool triggered;
         public ShipboardWeapon weapon;
+        [Range(0,1)]
         public float triggerAfter = 0;
+        [Range(0, 1)]
         public float ceaseAfter = 1;
     }
     public List<ShipboardWeaponSlot> weaponSlots;
@@ -32,7 +34,6 @@ public class ShipboardWeaponHolder : PlanExecuteBehaviour {
             {
                 if (!curSlot.triggered && curSlot.triggerAfter < GameManager.instance.t)
                 {
-                    Debug.Log("Fire after" + GameManager.instance.t);
                     curSlot.weapon.FireStart();
                     curSlot.triggered = true;
                 }

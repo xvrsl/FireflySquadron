@@ -44,6 +44,10 @@ public class ShipEnginePredictionVisualizer : MonoBehaviour {
     }
     public void Visualize()
     {
+        if(target== null)
+        {
+            return;
+        }
         ShipEngine.EngineStatus engineStatus= target.engineStatus;
         var result = ShipEngine.EngineStatus.Predict(engineStatus,totalTime,Time.fixedDeltaTime);
         InitializeVisualization();
