@@ -19,6 +19,10 @@ public class ShipPlanExecute : PlanExecuteBehaviour
         }
     }
 
+    [Header("Stored Informations")]
+    public Vector2 velocity;
+    public float angularVelocity;
+
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -27,12 +31,14 @@ public class ShipPlanExecute : PlanExecuteBehaviour
     public override void OnExecutePhaseStart()
     {
         base.OnExecutePhaseStart();
-        rigidbody.simulated = true;
+        rigidbody.velocity = velocity;
+        rigidbody.angularDrag = angularVelocity;
     }
 
     public override void OnPlanPhaseStart()
     {
         base.OnPlanPhaseStart();
-        rigidbody.simulated = false;
+        rigidbody.velocity = Vector2.zero;
+        rigidbody.angularVelocity = 0f;
     }
 }

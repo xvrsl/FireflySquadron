@@ -2,8 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShipEngine : MonoBehaviour {
-    public new Rigidbody2D rigidbody;
+public class ShipEngine : PlanExecuteBehaviour {
+    Rigidbody2D _rigidBody;
+    public new Rigidbody2D rigidbody
+    {
+        get
+        {
+            if(_rigidBody == null)
+            {
+                _rigidBody = GetComponent<Rigidbody2D>();
+            }
+            return _rigidBody;
+        }
+    }
     public ShipEngineProfile profile;
     [Header("Engine Status")]
     public float maxSpeed = 50f;
@@ -19,6 +30,9 @@ public class ShipEngine : MonoBehaviour {
     public float steerHandle;
     public bool brake;
 
+    [Header("Stored Informations")]
+    public Vector2 velocityStored;
+    public float angularVelocityStored;
 
     public Vector3 position
     {
@@ -52,6 +66,10 @@ public class ShipEngine : MonoBehaviour {
     {
         get
         {
+            if (!execute)
+            {
+                return velocityStored;
+            }
             return rigidbody.velocity;
         }
     }
@@ -211,19 +229,35 @@ public class ShipEngine : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	    if(rigidbody == null)
-        {
-            rigidbody = GetComponent<Rigidbody2D>();
-        }
+
         if (profile != null)
         {
             LoadProfile(profile);
         }
 	}
 
-	// Update is called once per frame
-	void FixedUpdate () {
-        EngineFixedUpdate();
+    public override void OnPlanPhaseStart()
+    {
+        base.OnPlanPhaseStart();
+        velocityStored = rigidbody.velocity;
+        angularVelocityStored = rigidbody.angularDrag;
+        rigidbody.velocity = Vector2.zero ;
+        rigidbody.angularVelocity = 0;
+    }
+
+    public override void OnExecutePhaseStart()
+    {
+        base.OnExecutePhaseStart();
+        rigidbody.velocity = velocityStored;
+        rigidbody.angularVelocity = angularVelocityStored;
+    }
+
+    // Update is called once per frame
+    void FixedUpdate () {
+        if(execute)
+        {
+            EngineFixedUpdate();
+        }
 	}
 
     void EngineFixedUpdate()
