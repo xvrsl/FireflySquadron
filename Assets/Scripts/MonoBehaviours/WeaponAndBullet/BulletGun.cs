@@ -68,6 +68,7 @@ public class BulletGun : ShipboardWeapon
         }
         newBullet.SetActive(true);
         Bullet newBulletComponent = newBullet.GetComponent<Bullet>();
+        newBulletComponent.master = this.master;
         newBulletComponent.flyingSpeed = flyingSpeed;
         newBulletComponent.damages = new List<Damage>(damages);
         newBulletComponent.lifeTime = lifeTime;

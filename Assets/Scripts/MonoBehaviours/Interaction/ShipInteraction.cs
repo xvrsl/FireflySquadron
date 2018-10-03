@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 public class ShipInteraction : PlanExecuteBehaviour {
+    [Header("References")]
+    public Player master;
+    public ShipEnginePredictionVisualizer visualizer;
+    [HideInInspector]
+    public bool onlyOperateMastersShip = true; 
     public ShipEngine interactingTarget;
     public Transform shipTransform
     {
@@ -24,7 +29,14 @@ public class ShipInteraction : PlanExecuteBehaviour {
 
     // Use this for initialization
     void Start () {
-
+        if(master == null)
+        {
+            master = GetComponent<Player>();
+        }
+        if(visualizer == null)
+        {
+            visualizer = GetComponent<ShipEnginePredictionVisualizer>();
+        }
 	}
 	
 	// Update is called once per frame
@@ -34,12 +46,12 @@ public class ShipInteraction : PlanExecuteBehaviour {
             ShipEngine clickedEngine;
             if (CheckIfMouseOnShip(out clickedEngine))
             {
-                interactingTarget = clickedEngine;
-                ToggleTargetBrake();
+                SetTarget(clickedEngine);
+                ToggleTargetBrake(); 
             }
             else
             {
-                interactingTarget = null;
+                SetTarget(null);
             }
         }
 
@@ -48,18 +60,17 @@ public class ShipInteraction : PlanExecuteBehaviour {
             ShipEngine clickedEngine;
             if (CheckIfMouseOnShip(out clickedEngine))
             {
-                interactingTarget = clickedEngine;
+                SetTarget(clickedEngine);
                 dragging = true;
             }
             else
             {
-                interactingTarget = null;
+                SetTarget(null);
             }
         }
         if (Input.GetMouseButtonUp(0) && dragging)
         {
             dragging = false;
-
         }
         if (dragging)
         {
@@ -72,13 +83,16 @@ public class ShipInteraction : PlanExecuteBehaviour {
 
     private void MouseInteraction()
     {
+        if(onlyOperateMastersShip && interactingTarget.master != master)
+        {
+            return;
+        }
         Vector3 mousePos = Input.mousePosition;
         Camera mainCamera = Camera.main;
         Vector3 worldMousePos = mainCamera.ScreenToWorldPoint(mousePos - Vector3.forward * mainCamera.transform.position.z);
         Vector3 delta = worldMousePos - shipTransform.position;
         Vector3 forward = shipTransform.up;
         float theta = Quaternion.FromToRotation(forward, delta).eulerAngles.z;
-        Debug.Log(theta);
         if(theta > 180)
         {
             theta -= 360;
@@ -134,6 +148,19 @@ public class ShipInteraction : PlanExecuteBehaviour {
         if (interactingTarget != null)
         {
             interactingTarget.brake = !interactingTarget.brake;
+        }
+    }
+
+    void SetTarget(ShipEngine target)
+    {
+        interactingTarget = target;
+        if (target != null && target.master != this.master && !GameManager.instance.gameSettings.othersShipEngineOperationVisible)
+        {
+            visualizer.SetTarget(null);
+        }
+        else
+        {
+            visualizer.SetTarget(target);
         }
     }
 }

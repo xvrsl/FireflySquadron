@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShipEngine : PlanExecuteBehaviour {
+    public Player master;
     Rigidbody2D _rigidBody;
     public new Rigidbody2D rigidbody
     {
@@ -233,6 +234,12 @@ public class ShipEngine : PlanExecuteBehaviour {
         if (profile != null)
         {
             LoadProfile(profile);
+        }
+
+        var id = GetComponent<UnitIdentity>();
+        if(id != null)
+        {
+            master = id.master;
         }
 	}
 

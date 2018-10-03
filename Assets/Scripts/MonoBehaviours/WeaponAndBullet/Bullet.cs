@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Bullet : PlanExecuteBehaviour {
+    public Player master;
     Rigidbody2D _rigidbody;
 
     public new Rigidbody2D rigidbody
@@ -72,16 +73,26 @@ public class Bullet : PlanExecuteBehaviour {
         Health targetHealth = collision.gameObject.GetComponent<Health>();
         if (targetHealth != null)
         {
-            //Deal Damage
-            targetHealth.TakeDamage(damages);
-            if (destroyOnDealDamage)
+            //Friendly fire check
+            if(!GameManager.instance.gameSettings.friendlyDamage && targetHealth.master == this.master)
             {
-                Destroy();
+                //Deal no damage
             }
+            else
+            {
+                targetHealth.TakeDamage(damages);
+                if (destroyOnDealDamage)
+                {
+                    Destroy();
+                    return;
+                }
+            }
+            //Deal Damage
         }
         if (destroyOnContact)
         {
             Destroy();
+            return;
         }
     }
 }

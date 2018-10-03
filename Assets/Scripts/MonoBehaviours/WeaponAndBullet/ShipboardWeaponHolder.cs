@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShipboardWeaponHolder : PlanExecuteBehaviour {
+    public Player master;
     [System.Serializable]
     public class ShipboardWeaponSlot
     {
@@ -19,8 +20,23 @@ public class ShipboardWeaponHolder : PlanExecuteBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
-	}
+        if(master == null)
+        {
+            var id = this.GetComponent<UnitIdentity>();
+            if(id != null)
+            {
+                master = id.master;
+            }
+        }
+        foreach (var curSlot in weaponSlots)
+        {
+            if(curSlot.weapon.master == null)
+            {
+                curSlot.weapon.master = master;
+            }
+        }
+
+    }
 	
 	// Update is called once per frame
 	void Update () {

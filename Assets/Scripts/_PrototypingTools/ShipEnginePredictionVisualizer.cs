@@ -123,9 +123,37 @@ public class ShipEnginePredictionVisualizer : MonoBehaviour {
 
                     ceaseBeacon.transform.position = ceasePos;
                     ceaseBeacon.transform.rotation = Quaternion.Euler(0, 0, ceaseRot);
+
+                    ceaseBeacon.SetActive(true);
+                    fireBeacon.SetActive(true);
                 }
             }
         }
     }
-    
+    public void Clear()
+    {
+        target = null;
+        weaponHolder = null;
+        for (int i = 0; i < movementBeaconParent.childCount; i++)
+        {
+            movementBeaconParent.GetChild(i).gameObject.SetActive(false);
+        }
+        if (fireBeacon != null)
+        {
+            fireBeacon.SetActive(false);
+        }
+        if (ceaseBeacon != null)
+        {
+            ceaseBeacon.SetActive(false);
+        }
+    }
+    public void SetTarget(ShipEngine target)
+    {
+        if(target == null)
+        {
+            Clear();
+        }
+        this.target = target;
+    }
+   
 }

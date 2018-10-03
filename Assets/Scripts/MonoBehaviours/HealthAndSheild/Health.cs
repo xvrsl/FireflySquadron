@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Health : MonoBehaviour {
+    public Player master;
+
     public Sheild sheild;
     public float maxHealth = 100;
     public float health = 100;
@@ -16,6 +18,15 @@ public class Health : MonoBehaviour {
 
     void Initialize()
     {
+        if(master == null)
+        {
+            var id = GetComponent<UnitIdentity>();
+            if(id != null)
+            {
+                master = id.master;
+            }
+
+        }
         health = maxHealth;
     }
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: DefaultEngineProfile
   m_EditorClassIdentifier: 
   discription: Ship engine
-  maxSpeed: 50
+  maxSpeed: 10
   accelerationDecay:
     serializedVersion: 2
     m_Curve:
@@ -37,7 +37,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  maxAcceleratePower: 10
+  maxAcceleratePower: 5
   brakeDrag: 1
   sideVelocityDrag: 5
   maxSteer: 50

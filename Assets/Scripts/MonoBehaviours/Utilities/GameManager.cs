@@ -157,5 +157,6 @@ public class GameManager : MonoBehaviour {
     {
         public float executeTime = 5f;
         public bool friendlyDamage = true;//Not implemented yet
+        public bool othersShipEngineOperationVisible = false;
     }
 }
