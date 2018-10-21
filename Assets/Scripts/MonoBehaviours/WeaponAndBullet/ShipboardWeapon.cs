@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class ShipboardWeapon : PlanExecuteBehaviour {
     public Player master;
+    public string weaponName = "Unknown";
+    public string discription = "Unknown";
     public bool fire;
     public float maxMagazine
     {

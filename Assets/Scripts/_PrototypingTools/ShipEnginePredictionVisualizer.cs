@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShipEnginePredictionVisualizer : MonoBehaviour {
+    public static ShipEnginePredictionVisualizer instance;
     public ShipEngine target;
     public ShipboardWeaponHolder weaponHolder;
     public int visualizeWeaponIndex = 0;
@@ -27,6 +28,7 @@ public class ShipEnginePredictionVisualizer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        instance = this;
         if(movementBeaconParent == null)
         {
             movementBeaconParent = this.transform;

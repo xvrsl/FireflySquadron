@@ -5,14 +5,27 @@ public class ShipInteraction : PlanExecuteBehaviour {
     [Header("References")]
     public Player master;
     public ShipEnginePredictionVisualizer visualizer;
+    public ControlPanelsHub controlPanelsHub {
+        get
+        {
+            return ControlPanelsHub.instance;
+        }
+    }
     [HideInInspector]
-    public bool onlyOperateMastersShip = true; 
-    public ShipEngine interactingTarget;
+    public bool onlyOperateMastersShip = true;
+    public Unit target;
+    public ShipEngine interactingShipEngine
+    {
+        get
+        {
+            return target.engine;
+        }
+    }
     public Transform shipTransform
     {
         get
         {
-            return interactingTarget.transform;
+            return interactingShipEngine.transform;
         }
     }
     [Header("Snap")]
@@ -43,29 +56,27 @@ public class ShipInteraction : PlanExecuteBehaviour {
 	void Update () {
         if (Input.GetMouseButtonDown(1) && !execute)
         {
-            ShipEngine clickedEngine;
-            if (CheckIfMouseOnShip(out clickedEngine))
+
+            SetTarget(null);
+
+        }
+        if (Input.GetMouseButtonDown(0) && !execute && Input.GetButton("Alt"))
+        {
+            Unit clickedUnit;
+            if (CheckIfMouseOnShip(out clickedUnit))
             {
-                SetTarget(clickedEngine);
-                ToggleTargetBrake(); 
-            }
-            else
-            {
-                SetTarget(null);
+                SetTarget(clickedUnit);
+                ToggleTargetBrake();
             }
         }
 
-        if (Input.GetMouseButtonDown(0) && !execute)
+            if (Input.GetMouseButtonDown(0) && !execute)
         {
-            ShipEngine clickedEngine;
-            if (CheckIfMouseOnShip(out clickedEngine))
+            Unit clickedUnit;
+            if (CheckIfMouseOnShip(out clickedUnit))
             {
-                SetTarget(clickedEngine);
+                SetTarget(clickedUnit);
                 dragging = true;
-            }
-            else
-            {
-                SetTarget(null);
             }
         }
         if (Input.GetMouseButtonUp(0) && dragging)
@@ -74,7 +85,7 @@ public class ShipInteraction : PlanExecuteBehaviour {
         }
         if (dragging)
         {
-            if(interactingTarget != null)
+            if(interactingShipEngine != null)
             {
                 MouseInteraction();
             }
@@ -83,7 +94,7 @@ public class ShipInteraction : PlanExecuteBehaviour {
 
     private void MouseInteraction()
     {
-        if(onlyOperateMastersShip && interactingTarget.master != master)
+        if(onlyOperateMastersShip && interactingShipEngine.master != master)
         {
             return;
         }
@@ -97,8 +108,13 @@ public class ShipInteraction : PlanExecuteBehaviour {
         {
             theta -= 360;
         }
-       
+
+        bool changeAcceleration = true;
         float dist = delta.magnitude - accelerationMinDist;
+        if(dist < 0)
+        {
+            changeAcceleration = false;
+        }
         dist = Mathf.Clamp(dist, 0, accelerationMaxDist);
 
 
@@ -117,26 +133,30 @@ public class ShipInteraction : PlanExecuteBehaviour {
                 theta = steerStep * forwardStepCount;
             }
         }
+
         float accelerateHandle = dist / accelerationMaxDist;
         float steerHandle = theta / 90;
         accelerateHandle = Mathf.Clamp01(accelerateHandle);
         steerHandle = Mathf.Clamp(steerHandle, -1, 1);
-        interactingTarget.accelerateHandle = accelerateHandle;
-        interactingTarget.steerHandle = steerHandle;
+        if(changeAcceleration)
+        {
+            interactingShipEngine.accelerateHandle = accelerateHandle;
+        }
+        interactingShipEngine.steerHandle = steerHandle;
     }
 
-    bool CheckIfMouseOnShip(out ShipEngine ship)
+    bool CheckIfMouseOnShip(out Unit unit)
     {
-        ship = null;
+        unit = null;
         Camera mainCamera = Camera.main;
         Vector3 worldMousePoint = mainCamera.ScreenToWorldPoint(Input.mousePosition - Vector3.forward * mainCamera.transform.position.z);
         RaycastHit2D hit = Physics2D.CircleCast(worldMousePoint, mouseDownRadius, Vector2.zero);
         if (hit.collider != null)
         {
-            ShipEngine clickedEngine = hit.collider.GetComponent<ShipEngine>();
-            if(clickedEngine != null)
+            Unit clickedUnit = hit.collider.GetComponent<Unit>();
+            if(clickedUnit != null)
             {
-                ship = clickedEngine;
+                unit = clickedUnit;
                 return true;
             }
         }
@@ -145,22 +165,24 @@ public class ShipInteraction : PlanExecuteBehaviour {
 
     void ToggleTargetBrake()
     {
-        if (interactingTarget != null)
+        if (interactingShipEngine != null && interactingShipEngine.master == master)
         {
-            interactingTarget.brake = !interactingTarget.brake;
+            interactingShipEngine.brake = !interactingShipEngine.brake;
         }
     }
 
-    void SetTarget(ShipEngine target)
+    void SetTarget(Unit target)
     {
-        interactingTarget = target;
-        if (target != null && target.master != this.master && !GameManager.instance.gameSettings.othersShipEngineOperationVisible)
+        this.target = target;
+        this.controlPanelsHub.SetTarget(target);
+        if (target == null || target.master != this.master && !GameManager.instance.gameSettings.othersShipEngineOperationVisible)
         {
             visualizer.SetTarget(null);
         }
         else
         {
-            visualizer.SetTarget(target);
+            //Actually Working
+            visualizer.SetTarget(target.engine);
         }
     }
 }

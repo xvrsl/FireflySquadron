@@ -8,5 +8,4 @@ public class Player : MonoBehaviour {
     public Sprite avatar = null;
     public Color primaryColor = Color.cyan;
     public Color secondaryColor = Color.blue;
-
 }

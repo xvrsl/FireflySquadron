@@ -9,4 +9,9 @@ public class UnitIdentity : MonoBehaviour {
         locomotive = 0,
         building = 1
     }
+    public UnitType type;
+    public string unitName = "Unnamed";
+    public string makerName = "Unknown Factory";
+    public string modelName = "Unkonwn Type";
+
 }
