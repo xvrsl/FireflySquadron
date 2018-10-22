@@ -18,6 +18,10 @@ public class ShipInteraction : PlanExecuteBehaviour {
     {
         get
         {
+            if(target == null)
+            {
+                return null;
+            }
             return target.engine;
         }
     }
@@ -70,7 +74,7 @@ public class ShipInteraction : PlanExecuteBehaviour {
             }
         }
 
-            if (Input.GetMouseButtonDown(0) && !execute)
+            if (Input.GetMouseButtonDown(0))
         {
             Unit clickedUnit;
             if (CheckIfMouseOnShip(out clickedUnit))
@@ -94,6 +98,10 @@ public class ShipInteraction : PlanExecuteBehaviour {
 
     private void MouseInteraction()
     {
+        if (execute)
+        {
+            return;
+        }
         if(onlyOperateMastersShip && interactingShipEngine.master != master)
         {
             return;
@@ -174,7 +182,7 @@ public class ShipInteraction : PlanExecuteBehaviour {
     void SetTarget(Unit target)
     {
         this.target = target;
-        this.controlPanelsHub.SetTarget(target);
+        this.controlPanelsHub.SetTarget(target,target != null && target.master == master);
         if (target == null || target.master != this.master && !GameManager.instance.gameSettings.othersShipEngineOperationVisible)
         {
             visualizer.SetTarget(null);
@@ -182,7 +190,7 @@ public class ShipInteraction : PlanExecuteBehaviour {
         else
         {
             //Actually Working
-            visualizer.SetTarget(target.engine);
+            visualizer.SetTarget(target);
         }
     }
 }

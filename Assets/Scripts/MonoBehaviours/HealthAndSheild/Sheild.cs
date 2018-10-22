@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[RequireComponent(typeof(Unit))]
 public class Sheild : PlanExecuteBehaviour {
     public float maxSheild = 100;
     public float sheild = 100;

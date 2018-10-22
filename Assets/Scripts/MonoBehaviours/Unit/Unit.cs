@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour {
+public class Unit : PlanExecuteBehaviour {
     public UnitIdentity identity;
     public ShipEngine engine;
     public ShipboardWeaponHolder weaponHolder;
@@ -12,6 +12,10 @@ public class Unit : MonoBehaviour {
     {
         get
         {
+            if(identity == null)
+            {
+                identity = GetComponent<UnitIdentity>();
+            }
             return identity.master;
         }
     }
@@ -28,6 +32,14 @@ public class Unit : MonoBehaviour {
             health = GetComponent<Health>();
         if(sheild == null)
             sheild = GetComponent<Sheild>();
+        if(master != null)
+        {
+            master.Register(this);
+        }
 	}
-	
+
+    public override void OnPlanPhaseStart()
+    {
+        base.OnPlanPhaseStart();
+    }
 }

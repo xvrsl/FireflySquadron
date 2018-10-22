@@ -129,6 +129,11 @@ public class ShipEnginePredictionVisualizer : MonoBehaviour {
                     ceaseBeacon.SetActive(true);
                     fireBeacon.SetActive(true);
                 }
+                else
+                {
+                    ceaseBeacon.SetActive(false);
+                    fireBeacon.SetActive(false);
+                }
             }
         }
     }
@@ -149,13 +154,17 @@ public class ShipEnginePredictionVisualizer : MonoBehaviour {
             ceaseBeacon.SetActive(false);
         }
     }
-    public void SetTarget(ShipEngine target)
+    public void SetTarget(Unit target)
     {
         if(target == null)
         {
             Clear();
+            return;
         }
-        this.target = target;
+        this.target = target.engine;
+        this.weaponHolder = target.weaponHolder;
+        this.visualizeWeaponIndex = 0;
+
     }
    
 }

@@ -41,6 +41,7 @@ public class ShipEngineUI : ControlPanelUI
         base.Update();
         if (target != null)
         {
+            hidden = false;
             if (valueDirty)
             {
                 ApplyValues();
@@ -50,6 +51,10 @@ public class ShipEngineUI : ControlPanelUI
             {
                 RenewValues();
             }
+        }
+        else
+        {
+            hidden = true;
         }
 	}
 
@@ -84,4 +89,18 @@ public class ShipEngineUI : ControlPanelUI
         brakeSlider.value = target.brake ? 1 : 0;
         valueDirty = false;
     }
+
+    public void SetControlability(bool controlable)
+    {
+        accelerationSlider.interactable = controlable;
+        steerSlider.interactable = controlable;
+        brakeSlider.interactable = controlable;
+    }
+
+    public override void OnExecutePhaseStart()
+    {
+        base.OnExecutePhaseStart();
+        SetControlability(false);
+    }
+
 }

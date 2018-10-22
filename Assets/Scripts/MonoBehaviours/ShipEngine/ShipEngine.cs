@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[RequireComponent(typeof(Unit))]
 public class ShipEngine : PlanExecuteBehaviour {
     public Player master;
     Rigidbody2D _rigidBody;

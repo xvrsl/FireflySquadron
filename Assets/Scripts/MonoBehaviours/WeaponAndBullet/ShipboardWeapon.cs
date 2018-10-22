@@ -7,27 +7,27 @@ public abstract class ShipboardWeapon : PlanExecuteBehaviour {
     public string weaponName = "Unknown";
     public string discription = "Unknown";
     public bool fire;
-    public float maxMagazine
+    public float maxMegazine
     {
         get
         {
             return GetMaxMagazine();
         }
     }
-    public float magazine
+    public float megazine
     {
         get
         {
             return GetMagazine();
         }
     }
-    public float magazineStatus
+    public float megazineStatus
     {
         get
         {
-            if(maxMagazine > 0)
+            if(maxMegazine > 0)
             {
-                return magazine / maxMagazine;
+                return megazine / maxMegazine;
             }
             else
             {

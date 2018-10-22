@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ControlPanelsHub : MonoBehaviour {
+public class ControlPanelsHub : PlanExecuteBehaviour {
     public static ControlPanelsHub instance;
     public UnitInfoUI shipInfoUI;
     public ShipEngineUI shipEngineUI;
     public WeaponSlotUI weaponSlotUI;
-    public void SetTarget(Unit target)
+    public void SetTarget(Unit target,bool controlable)
     {
+        
         if(target == null)
         {
-            shipEngineUI.Initialize(null);
+            shipInfoUI.Initialize(null);
             shipEngineUI.Initialize(null);
             weaponSlotUI.Initialize(null);
             return;
@@ -19,6 +20,8 @@ public class ControlPanelsHub : MonoBehaviour {
         shipInfoUI.Initialize(target.identity);
         shipEngineUI.Initialize(target.engine);
         weaponSlotUI.Initialize(target.weaponHolder);
+        shipEngineUI.SetControlability(!execute && controlable);
+        weaponSlotUI.SetControlability(!execute && controlable);
     }
 
     // Use this for initialization

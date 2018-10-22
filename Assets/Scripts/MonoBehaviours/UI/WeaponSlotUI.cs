@@ -26,6 +26,8 @@ public class WeaponSlotUI : ControlPanelUI
         }
     }
     public Text weaponName;
+    public Text ammoText;
+    public Slider magazineSlider;
     public Slider activationSlider;
     bool activation
     {
@@ -66,6 +68,7 @@ public class WeaponSlotUI : ControlPanelUI
                     curButton.gameObject.SetActive(i < targetWeaponSlotsCount);
                 }
             }
+            SetIndex(0);
             RenewValues();
         }
     }
@@ -75,6 +78,16 @@ public class WeaponSlotUI : ControlPanelUI
         ShipEnginePredictionVisualizer.instance.weaponHolder = targetWeaponHolder;
         ShipEnginePredictionVisualizer.instance.visualizeWeaponIndex = index;
         RenewValues();
+        
+    }
+    public void RefreshAmmoStatus()
+    {
+        //Ammo Magazine status refresh
+        float maxMegazine = target.weapon.maxMegazine;
+        float megazine = target.weapon.megazine;
+        float megazineRate = target.weapon.megazineStatus;
+        ammoText.text = "" + (int)megazine + "/" + (int)maxMegazine;
+        magazineSlider.value = megazineRate;
     }
     public void ApplyValues()
     {
@@ -126,12 +139,26 @@ public class WeaponSlotUI : ControlPanelUI
             {
                 RenewValues();
             }
+            RefreshAmmoStatus();
         }
         else
         {
             hidden = true;
         }
-        
 
-	}
+
+    }
+
+    public void SetControlability(bool controlable)
+    {
+        activationSlider.interactable = controlable;
+        fireCeaseSlider.subSliderA.interactable = controlable;
+        fireCeaseSlider.subSliderB.interactable = controlable;
+    }
+
+    public override void OnExecutePhaseStart()
+    {
+        base.OnExecutePhaseStart();
+        SetControlability(false);
+    }
 }

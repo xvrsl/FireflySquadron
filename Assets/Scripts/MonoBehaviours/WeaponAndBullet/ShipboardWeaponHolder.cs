@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[RequireComponent(typeof(Unit))]
 public class ShipboardWeaponHolder : PlanExecuteBehaviour {
     public Player master;
     [System.Serializable]

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[RequireComponent(typeof(Unit))]
 public class UnitIdentity : MonoBehaviour {
     public Player master;
     public enum UnitType
